@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://blogspace-backend-blgv.onrender.com";
 import { Button } from "../components/ui/button";
 
 export default function ForgotPassword() {

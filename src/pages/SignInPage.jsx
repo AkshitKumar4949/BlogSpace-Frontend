@@ -6,7 +6,7 @@ import { Label } from "../components/ui/label";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://blogspace-backend-blgv.onrender.com";
 
 
 export default function SignInPage() {
