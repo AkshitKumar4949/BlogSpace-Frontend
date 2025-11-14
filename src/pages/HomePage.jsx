@@ -104,7 +104,7 @@ export default function HomePage() {
                   </div>
                   <div className="p-6 flex flex-col flex-grow">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3 flex-wrap">
-                      <span>{blog.author?.name || "Unknown"}</span>
+                      <span>{blog.author?.firstName} {blog.author?.lastName}</span>
                       <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
                       <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
                     </div>
