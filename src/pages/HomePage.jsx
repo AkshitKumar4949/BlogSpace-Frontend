@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
 import { ThemeToggle } from "../components/ThemeToggle"
 import axios from "axios"
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
 
 export default function HomePage() {
   const [blogs, setBlogs] = useState([])
@@ -11,7 +12,7 @@ export default function HomePage() {
   useEffect(() => {
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get("http://localhost:5050/blogs");
+  const res = await axios.get(`${BACKEND_URL}/blogs`);
       setBlogs(res.data);
     } catch (err) {
       console.error("Error fetching blogs:", err);
@@ -96,7 +97,7 @@ export default function HomePage() {
                 <Link to={`/blog/${blog._id}`} className="flex flex-col h-full">
                   <div className="aspect-video bg-muted overflow-hidden">
                     <img
-                      src={`http://localhost:5050${blog.featuredImage}`}
+                      src={`${BACKEND_URL}${blog.featuredImage}`}
                       alt={blog.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />

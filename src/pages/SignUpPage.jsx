@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
 import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
 import { Input } from "../components/ui/input"
@@ -28,7 +29,7 @@ export default function SignUpPage() {
     }
 
     try {
-      const res = await axios.post("http://localhost:5050/auth/signup", {
+  const res = await axios.post(`${BACKEND_URL}/auth/signup`, {
         email,
         password,
         firstName,

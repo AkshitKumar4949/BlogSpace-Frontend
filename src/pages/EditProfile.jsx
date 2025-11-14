@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -23,7 +24,7 @@ export default function EditProfilePage() {
     if (!userId || !token) return;
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:5050/users/${userId}`, {
+  const res = await axios.get(`${BACKEND_URL}/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data.user);
@@ -43,7 +44,7 @@ export default function EditProfilePage() {
     setLoading(true);
     try {
       await axios.put(
-        `http://localhost:5050/users/${userId}`, // ✅ fixed: missing "//"
+  `${BACKEND_URL}/users/${userId}`, // ✅ fixed: missing "//"
         {
           firstName: user.firstName,
           lastName: user.lastName,

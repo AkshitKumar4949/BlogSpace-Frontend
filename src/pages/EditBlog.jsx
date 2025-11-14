@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
 import { Card } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
@@ -25,7 +26,7 @@ export default function EditBlog() {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await axios.get(`http://localhost:5050/blogs/${id}`);
+  const res = await axios.get(`${BACKEND_URL}/blogs/${id}`);
         const data = res.data.blog || res.data;
 
         setBlog({
@@ -62,7 +63,7 @@ export default function EditBlog() {
       formData.append("tags", blog.tags);
       if (imageFile) formData.append("featuredImage", imageFile);
 
-      await axios.put(`http://localhost:5050/blogs/${id}`, formData, {
+  await axios.put(`${BACKEND_URL}/blogs/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -144,7 +145,7 @@ export default function EditBlog() {
                 <div className="mt-4">
                   <p className="text-sm text-muted-foreground mb-2">Current Image:</p>
                   <img
-                    src={`http://localhost:5050${blog.featuredImage}`}
+                    src={`${BACKEND_URL}${blog.featuredImage}`}
                     alt="Blog"
                     className="rounded-lg max-h-48 object-cover border border-border"
                   />

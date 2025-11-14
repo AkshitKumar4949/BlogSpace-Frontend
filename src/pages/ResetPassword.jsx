@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
 import { Button } from "../components/ui/button";
 
 export default function ResetPassword() {
@@ -19,7 +20,7 @@ export default function ResetPassword() {
     }
     setLoading(true);
     try {
-      await axios.post(`http://localhost:5050/users/reset-password/${token}`, { newPassword });
+  await axios.post(`${BACKEND_URL}/users/reset-password/${token}`, { newPassword });
       setMessage("Password reset successful. Redirecting to login...");
       setTimeout(() => navigate("/auth/signin"), 2000);
     } catch (err) {

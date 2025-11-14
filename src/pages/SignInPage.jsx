@@ -6,6 +6,7 @@ import { Label } from "../components/ui/label";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
 
 
 export default function SignInPage() {
@@ -20,7 +21,7 @@ export default function SignInPage() {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5050/auth/signin", {
+  const res = await axios.post(`${BACKEND_URL}/auth/signin`, {
         email,
         password,
       });

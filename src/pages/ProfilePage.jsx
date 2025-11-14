@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import axios from "axios";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
 import { Card } from "../components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { ArrowLeft, Settings, Edit3, Heart } from "lucide-react";
@@ -24,7 +25,7 @@ export default function ProfilePage() {
   const handleDelete = async (blogId) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
     try {
-      await axios.delete(`http://localhost:5050/blogs/${blogId}`, {
+  await axios.delete(`${BACKEND_URL}/blogs/${blogId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlogs((prev) => prev.filter((b) => b._id !== blogId));
@@ -37,7 +38,7 @@ export default function ProfilePage() {
   const handleFollowToggle = async () => {
     if (!user || user._id === loggedInUserId) return;
     try {
-      const url = `http://localhost:5050/users/follow-toggle/${user._id}`;
+  const url = `${BACKEND_URL}/users/follow-toggle/${user._id}`;
       await axios.post(url, {}, { headers: { Authorization: `Bearer ${token}` } });
 
       setIsFollowing(!isFollowing);
@@ -58,7 +59,7 @@ export default function ProfilePage() {
       if (!token) return;
       const userIdToFetch = id || loggedInUserId;
       try {
-        const res = await axios.get(`http://localhost:5050/users/${userIdToFetch}`, {
+  const res = await axios.get(`${BACKEND_URL}/users/${userIdToFetch}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data.user);

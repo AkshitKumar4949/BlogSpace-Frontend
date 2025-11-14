@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
 import { Button } from "../components/ui/button";
 
 export default function ForgotPassword() {
@@ -11,7 +12,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5050/users/forgot-password", { email });
+  const res = await axios.post(`${BACKEND_URL}/users/forgot-password`, { email });
       setMessage(res.data.message);
     } catch (err) {
       console.error(err);

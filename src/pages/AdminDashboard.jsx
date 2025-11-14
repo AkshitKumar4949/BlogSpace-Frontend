@@ -4,6 +4,7 @@ import { Card } from "../components/ui/card"
 import { Trash2, User, Search } from "lucide-react"
 import { Input } from "../components/ui/input"
 import axios from "axios"
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || process.env.BACKEND_URL || "http://localhost:5050";
 export default function AdminDashboard() {
     const [users, setUsers] = useState([])
     const [search, setSearch] = useState("")
@@ -13,7 +14,7 @@ export default function AdminDashboard() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.get("http://localhost:5050/admin/users", {
+    const res = await axios.get(`${BACKEND_URL}/admin/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -39,7 +40,7 @@ export default function AdminDashboard() {
         if (!window.confirm("Are you sure you want to delete this user?")) return
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`http://localhost:5050/admin/users/${id}`, {
+            const res = await fetch(`${BACKEND_URL}/admin/users/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,

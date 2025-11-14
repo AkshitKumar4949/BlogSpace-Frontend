@@ -8,7 +8,8 @@ import { Textarea } from "../components/ui/textarea"
 import { ArrowLeft, Upload, Eye, Save } from "lucide-react"
 import { ThemeToggle } from "../components/ThemeToggle"
 import { useNavigate } from "react-router-dom"
-import axios from "axios" 
+import axios from "axios";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
 
 export default function CreateBlogPage() {
   const [title, setTitle] = useState("")
@@ -36,7 +37,7 @@ export default function CreateBlogPage() {
     }
 
     try {
-      const res = await axios.post("http://localhost:5050/blogs", formData, {
+      const res = await axios.post(`${BACKEND_URL}/blogs`, formData, {
         headers: {
           "Content-Type": "multipart/form-data", // important for FormData
           Authorization: `Bearer ${localStorage.getItem("token")}`, // if auth needed
