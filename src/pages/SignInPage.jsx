@@ -113,10 +113,6 @@ export default function SignInPage() {
                 <span className="bg-background px-4 text-muted-foreground">or</span>
               </div>
             </div>
-
-            <Button variant="outline" type="button" className="w-full bg-transparent">
-              Continue with Google
-            </Button>
           </form>
 
           <div className="text-center mt-6 pt-6 border-t border-border">
