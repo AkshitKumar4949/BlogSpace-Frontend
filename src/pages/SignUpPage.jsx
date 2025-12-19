@@ -170,9 +170,9 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            <Button variant="outline" type="button" className="w-full bg-transparent">
+            {/* <Button variant="outline" type="button" className="w-full bg-transparent">
               Continue with Google
-            </Button>
+            </Button> */}
           </form>
 
           <div className="text-center mt-6 pt-6 border-t border-border">
