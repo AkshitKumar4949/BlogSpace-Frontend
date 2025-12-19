@@ -70,10 +70,15 @@ export default function ProfilePage() {
         }
       } catch (err) {
         console.error(err);
+        // If fetching fails and it's own profile, clear old localStorage and redirect to login
+        if (!id && err.response?.status === 500) {
+          localStorage.clear();
+          navigate("/auth/signin");
+        }
       }
     };
     fetchUser();
-  }, [id, token]);
+  }, [id, token, navigate]);
 
   if (!user) return <div className="text-center py-20">Loading...</div>;
 

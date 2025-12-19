@@ -30,10 +30,15 @@ export default function EditProfilePage() {
         setUser(res.data.user);
       } catch (err) {
         console.error("Error fetching user:", err);
+        // If user not found (500 error from old "adminId"), clear and redirect
+        if (err.response?.status === 500) {
+          localStorage.clear();
+          navigate("/auth/signin");
+        }
       }
     };
     fetchUser();
-  }, []);
+  }, [navigate]);
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
