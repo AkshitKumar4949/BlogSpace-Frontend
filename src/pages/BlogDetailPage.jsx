@@ -20,7 +20,11 @@ export default function BlogDetailPage() {
         const res = await axios.get(`https://blogspace-backend-blgv.onrender.com/blogs/${id}`)
         setBlog(res.data.blog || res.data)
         setAuthor(res.data.author);
-        setIsFollowing(res.data.author.followers.includes(userId));
+        setIsFollowing(
+          res.data.author && Array.isArray(res.data.author.followers) && userId
+            ? res.data.author.followers.includes(userId)
+            : false
+        );
       } catch (err) {
         console.error("Error fetching blog:", err)
       } finally {
