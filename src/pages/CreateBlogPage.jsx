@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
@@ -10,6 +10,8 @@ import { ThemeToggle } from "../components/ThemeToggle"
 import { useNavigate } from "react-router-dom"
 import axios from "axios" 
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://blogspace-backend-blgv.onrender.com"
+
 export default function CreateBlogPage() {
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
@@ -17,37 +19,87 @@ export default function CreateBlogPage() {
   const [tags, setTags] = useState("")
   const [isPreview, setIsPreview] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
+  const [isPublishing, setIsPublishing] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [publishStatus, setPublishStatus] = useState("")
+  const idempotencyKeyRef = useRef(null)
+  const publishingRef = useRef(false)
 
   const navigate = useNavigate()
+  const createIdempotencyKey = () => {
+    if (crypto.randomUUID) return crypto.randomUUID()
+    return `${Date.now()}-${Math.random().toString(36).slice(2)}`
+  }
+
   const handlePublish = async () => {
-    const userId = localStorage.getItem("userId") // set this after login
-    if (!userId) {
+    if (publishingRef.current) return
+
+    const token = localStorage.getItem("token")
+    if (!token) {
       alert("You must be logged in to publish a blog");
       return;
     }
+
+    if (!title.trim() || !content.trim()) {
+      alert("Title and content are required");
+      return;
+    }
+
+    if (!idempotencyKeyRef.current) {
+      idempotencyKeyRef.current = createIdempotencyKey()
+    }
+
+    publishingRef.current = true
+    setIsPublishing(true)
+    setUploadProgress(10)
+    setPublishStatus(selectedFile ? "Uploading image..." : "Publishing blog...")
+
     const formData = new FormData()
     formData.append("title", title)
     formData.append("excerpt", excerpt)
     formData.append("content", content)
     formData.append("tags", tags)
-    formData.append("userId", userId)
     if (selectedFile) {
       formData.append("featuredImage", selectedFile)
     }
 
     try {
-      const res = await axios.post("https://blogspace-backend-blgv.onrender.com/blogs", formData, {
+      const res = await axios.post(`${BACKEND_URL}/blogs`, formData, {
         headers: {
-          "Content-Type": "multipart/form-data", // important for FormData
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // if auth needed
+          Authorization: `Bearer ${token}`,
+          "Idempotency-Key": idempotencyKeyRef.current,
+        },
+        onUploadProgress: (progressEvent) => {
+          if (!progressEvent.total) return
+          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+          setUploadProgress(Math.min(percent, 95))
+          if (percent >= 100) {
+            setPublishStatus("Finishing publish...")
+          }
         },
       });
 
       console.log("Blog created:", res.data);
+      setUploadProgress(100)
+      setPublishStatus("Published")
+      idempotencyKeyRef.current = null
       alert("Blog published successfully!");
       navigate("/");
     } catch (err) {
       console.error("Error creating blog:", err);
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("role");
+        idempotencyKeyRef.current = null
+        alert("Your session has expired. Please sign in again.");
+        navigate("/auth/signin");
+        return;
+      }
+      alert(err.response?.data?.message || "Failed to publish blog");
+    } finally {
+      publishingRef.current = false
+      setIsPublishing(false)
     }
   }
 
@@ -81,13 +133,30 @@ export default function CreateBlogPage() {
               </Button>
               <ThemeToggle />
               {/* Publish button now calls handlePublish */}
-              <Button size="sm" onClick={handlePublish}>
-                Publish
+              <Button size="sm" onClick={handlePublish} disabled={isPublishing}>
+                {isPublishing ? "Publishing..." : "Publish"}
               </Button>
             </div>
           </div>
         </div>
       </header>
+
+      {isPublishing && (
+        <div className="border-b border-border bg-background">
+          <div className="max-w-6xl mx-auto px-4 py-3 space-y-2">
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <span>{publishStatus}</span>
+              <span>{uploadProgress}%</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full bg-foreground transition-all duration-300"
+                style={{ width: `${uploadProgress}%` }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className="max-w-4xl mx-auto px-4 py-12">
         {!isPreview ? (

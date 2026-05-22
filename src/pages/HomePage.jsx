@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
 import { ThemeToggle } from "../components/ThemeToggle"
 import axios from "axios"
+import { getImageUrl } from "../lib/imageUrl"
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://blogspace-backend-blgv.onrender.com";
 
 export default function HomePage() {
@@ -97,7 +98,7 @@ export default function HomePage() {
                 <Link to={`/blog/${blog._id}`} className="flex flex-col h-full">
                   <div className="aspect-video bg-muted overflow-hidden">
                     <img
-                      src={`${BACKEND_URL}${blog.featuredImage}`}
+                      src={getImageUrl(blog.featuredImage, BACKEND_URL)}
                       alt={blog.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />

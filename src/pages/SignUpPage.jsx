@@ -30,10 +30,10 @@ export default function SignUpPage() {
 
     try {
   const res = await axios.post(`${BACKEND_URL}/auth/signup`, {
-        email,
+        email: email.trim().toLowerCase(),
         password,
-        firstName,
-        lastName,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
       })
 
       setSuccess(res.data.msg || "Account created successfully")

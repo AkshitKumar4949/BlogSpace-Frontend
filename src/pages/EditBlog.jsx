@@ -7,6 +7,7 @@ import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Button } from "../components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { getImageUrl } from "../lib/imageUrl";
 
 export default function EditBlog() {
   const { id } = useParams();
@@ -145,7 +146,7 @@ export default function EditBlog() {
                 <div className="mt-4">
                   <p className="text-sm text-muted-foreground mb-2">Current Image:</p>
                   <img
-                    src={`${BACKEND_URL}${blog.featuredImage}`}
+                    src={getImageUrl(blog.featuredImage, BACKEND_URL)}
                     alt="Blog"
                     className="rounded-lg max-h-48 object-cover border border-border"
                   />

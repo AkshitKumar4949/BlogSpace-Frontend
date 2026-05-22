@@ -5,6 +5,9 @@ import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
 import { ArrowLeft, Heart, MessageCircle, Share2, Bookmark } from "lucide-react"
 import { ThemeToggle } from "../components/ThemeToggle"
+import { getImageUrl } from "../lib/imageUrl"
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://blogspace-backend-blgv.onrender.com";
 
 export default function BlogDetailPage() {
   const { id } = useParams()
@@ -17,7 +20,7 @@ export default function BlogDetailPage() {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await axios.get(`https://blogspace-backend-blgv.onrender.com/blogs/${id}`)
+        const res = await axios.get(`${BACKEND_URL}/blogs/${id}`)
         setBlog(res.data.blog || res.data)
         setAuthor(res.data.author);
         setIsFollowing(
@@ -40,7 +43,7 @@ export default function BlogDetailPage() {
     if (!token) return alert("You must be logged in to follow users");
 
     try {
-      const url = `https://blogspace-backend-blgv.onrender.com/users/follow-toggle/${author._id}`;
+      const url = `${BACKEND_URL}/users/follow-toggle/${author._id}`;
       await axios.post(url, {}, { headers: { Authorization: `Bearer ${token}` } });
 
       // Update local state
@@ -140,7 +143,7 @@ export default function BlogDetailPage() {
             {blog.featuredImage && (
               <div className="aspect-video bg-muted overflow-hidden rounded-lg mb-8">
                 <img
-                  src={`https://blogspace-backend-blgv.onrender.com${blog.featuredImage}`}
+                  src={getImageUrl(blog.featuredImage, BACKEND_URL)}
                   alt={blog.title}
                   className="w-full h-full object-cover"
                 />

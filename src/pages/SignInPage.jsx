@@ -22,7 +22,7 @@ export default function SignInPage() {
 
     try {
   const res = await axios.post(`${BACKEND_URL}/auth/signin`, {
-        email,
+        email: email.trim().toLowerCase(),
         password,
       });
 
