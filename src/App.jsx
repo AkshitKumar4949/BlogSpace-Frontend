@@ -9,8 +9,6 @@ import SignUpPage from "./pages/SignUpPage"
 import AdminDashboard from "./pages/AdminDashboard"
 import EditProfile from "./pages/EditProfile"
 import EditBlog from "./pages/EditBlog"
-import ForgotPassword from "./pages/ForgotPassword"
-import ResetPassword from "./pages/ResetPassword"
 function App() {
   return (
     <ThemeProvider>
@@ -27,8 +25,6 @@ function App() {
             <Route path="/edit-blog/:id" element={<EditBlog />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
             <Route path="/admin" element={<AdminDashboard/>} />
-            <Route path="/users/forgot-password" element={<ForgotPassword/>} />
-            <Route path="/reset-password/:token" element={<ResetPassword/>} />
           </Routes>
         </div>
       </Router>
